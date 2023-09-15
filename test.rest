@@ -1,7 +1,7 @@
 GET http://127.0.0.1:3000/api/persons
 
 ###
-GET http://127.0.0.1:3000/api/persons/4
+GET http://127.0.0.1:3000/api/persons/65040444b503bfadc0329f06
 
 ###
 GET http://127.0.0.1:3000/api/persons/6
@@ -16,4 +16,13 @@ Content-Type: application/json
 {
     "name": "Liisa Marttinenn",
     "number": "09-344-567345"
+}
+
+###
+POST http://127.0.0.1:3000/api/persons
+Content-Type: application/json
+
+{
+    "name": "",
+    "number": ""
 }

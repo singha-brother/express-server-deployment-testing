@@ -1,3 +1,4 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
 
 if (process.argv.length < 3) {
@@ -6,8 +7,9 @@ if (process.argv.length < 3) {
   process.exit()
 }
 
-const password = process.argv[2]
-const DB_URL = `mongodb+srv://singha:${password}@full-stack-open.i8kn2ld.mongodb.net/PhonebookApp?retryWrites=true&w=majority`
+// const password = process.argv[2]
+// TEST WITH DOTENV
+const DB_URL = process.env.REMOTE_DB_URL
 // const DB_URL = `mongodb://127.0.0.1:27017/phonebook`
 mongoose.set('strictQuery', false)
 mongoose
