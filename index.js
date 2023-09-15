@@ -6,6 +6,17 @@ const app = express()
 const PhoneBook = require('./models/phonebook_db')
 // let data = require('./data')
 
+const errorHandler = (err, req, res, next) => {
+  console.log(err.message)
+  if (err.message && err.statusCode) {
+    res.status(err.statusCode).json({
+      status: 'failed',
+      message: err.message,
+    })
+  }
+  next(err)
+}
+
 app.use(cors())
 app.use(express.json())
 app.use(express.static('dist'))
@@ -39,7 +50,7 @@ app.get('/api/persons', (req, res) => {
   })
 })
 
-app.get('/api/persons/:id', (req, res) => {
+app.get('/api/persons/:id', (req, res, next) => {
   // const id = req.params.id * 1
   // const number = data.find((d) => d.id === id)
   // if (number) {
@@ -56,10 +67,9 @@ app.get('/api/persons/:id', (req, res) => {
       res.json(number)
     })
     .catch((err) => {
-      res.status(404).json({
-        status: 'failed',
-        message: 'There is no number with that id!',
-      })
+      err.statusCode = 404
+      err.message = 'There is no number with that id!'
+      next(err)
     })
 })
 
@@ -97,12 +107,23 @@ app.post('/api/persons', (req, res) => {
   })
 })
 
-app.put('/api/persons/:id', (req, res) => {
+app.put('/api/persons/:id', (req, res, next) => {
   // const id = req.params.id * 1
   // const content = req.body
   // const { name, number } = content
   // data = data.map((d) => (d.id !== id ? d : { ...d, name, number }))
   // res.json({ id, name, number })
+  const { name, number } = req.body
+  const editedNumber = { name, number }
+  PhoneBook.findByIdAndUpdate(req.params.id, editedNumber, { new: true })
+    .then((updated) => {
+      res.json(updated)
+    })
+    .catch((err) => {
+      err.statusCode = 500
+      err.message = 'Failed in updating number'
+      next(err)
+    })
 })
 
 app.delete('/api/persons/:id', (req, res) => {
@@ -127,6 +148,8 @@ app.delete('/api/persons/:id', (req, res) => {
       })
     })
 })
+
+app.use(errorHandler)
 
 app.listen(3000, () => {
   console.log(`http://0.0.0.0:3000`)

@@ -26,3 +26,12 @@ Content-Type: application/json
     "name": "",
     "number": ""
 }
+
+### 
+PUT http://127.0.0.1:3000/api/persons/65040444b503bfadc0329f06
+Content-Type: application/json
+
+{
+    "name": "Anna",
+    "number": "01-123131232"
+}
