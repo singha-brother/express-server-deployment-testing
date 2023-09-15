@@ -4,7 +4,7 @@
   "description": "full stack open course part 3, deploy express server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "thiha naung",
   "license": "ISC",
