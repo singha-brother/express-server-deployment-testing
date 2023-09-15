@@ -7,14 +7,29 @@ const PhoneBook = require('./models/phonebook_db')
 // let data = require('./data')
 
 const errorHandler = (err, req, res, next) => {
-  console.log(err.message)
-  if (err.message && err.statusCode) {
+  if (err.name === 'CastError') {
+    return res.status(400).send({
+      status: 'failed',
+      message: 'Malformed ID',
+    })
+  } else if (err.name === 'ValidationError') {
+    return res.status(400).json({
+      status: 'failed',
+      message: err.message,
+    })
+  } else if (err.message && err.statusCode) {
     res.status(err.statusCode).json({
       status: 'failed',
       message: err.message,
     })
   }
   next(err)
+}
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({
+    message: "This endpoint doesn't exist yet",
+  })
 }
 
 app.use(cors())
@@ -73,16 +88,16 @@ app.get('/api/persons/:id', (req, res, next) => {
     })
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
   const content = req.body
   const { name, number } = content
-  if (name === '' || number === '') {
-    res.status(400).json({
-      status: 'failed',
-      message: 'name and number must be filled',
-    })
-    return
-  }
+  // if (name === '' || number === '') {
+  //   res.status(400).json({
+  //     status: 'failed',
+  //     message: 'name and number must be filled',
+  //   })
+  //   return
+  // }
 
   // // check name already existed
   // if (data.find((d) => d.name === name)) {
@@ -102,9 +117,12 @@ app.post('/api/persons', (req, res) => {
     name,
     number,
   })
-  newNumber.save().then((savedNum) => {
-    res.json(savedNum)
-  })
+  newNumber
+    .save()
+    .then((savedNum) => {
+      res.json(savedNum)
+    })
+    .catch((err) => next(err))
 })
 
 app.put('/api/persons/:id', (req, res, next) => {
@@ -115,13 +133,15 @@ app.put('/api/persons/:id', (req, res, next) => {
   // res.json({ id, name, number })
   const { name, number } = req.body
   const editedNumber = { name, number }
-  PhoneBook.findByIdAndUpdate(req.params.id, editedNumber, { new: true })
+  PhoneBook.findByIdAndUpdate(req.params.id, editedNumber, {
+    new: true,
+    runValidators: true,
+    context: 'query',
+  })
     .then((updated) => {
       res.json(updated)
     })
     .catch((err) => {
-      err.statusCode = 500
-      err.message = 'Failed in updating number'
       next(err)
     })
 })
@@ -150,7 +170,8 @@ app.delete('/api/persons/:id', (req, res) => {
 })
 
 app.use(errorHandler)
+app.use(unknownEndpoint)
 
-app.listen(3000, () => {
-  console.log(`http://0.0.0.0:3000`)
+app.listen(process.env.PORT || 3001, () => {
+  console.log(`http://0.0.0.0:3001`)
 })

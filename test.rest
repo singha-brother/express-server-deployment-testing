@@ -23,8 +23,8 @@ POST http://127.0.0.1:3000/api/persons
 Content-Type: application/json
 
 {
-    "name": "",
-    "number": ""
+    "name": "abc",
+    "number": "013-1231233"
 }
 
 ### 
