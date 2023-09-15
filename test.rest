@@ -1,0 +1,19 @@
+GET http://127.0.0.1:3000/api/persons
+
+###
+GET http://127.0.0.1:3000/api/persons/4
+
+###
+GET http://127.0.0.1:3000/api/persons/6
+
+###
+DELETE http://127.0.0.1:3000/api/persons/4
+
+###
+POST http://127.0.0.1:3000/api/persons
+Content-Type: application/json
+
+{
+    "name": "Liisa Marttinenn",
+    "number": "09-344-567345"
+}
