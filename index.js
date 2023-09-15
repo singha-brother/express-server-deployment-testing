@@ -56,7 +56,7 @@ app.use(
 app.get('/info', (req, res) => {
   const date = new Date()
   res.send(`Phonebook has info for\
-   ${data.length} people<br/>${date.toUTCString()}`)
+   4 people<br/>${date.toUTCString()}`)
 })
 
 app.get('/api/persons', (req, res) => {
@@ -155,13 +155,13 @@ app.delete('/api/persons/:id', (req, res) => {
   // })
   const id = req.params.id
   PhoneBook.findByIdAndDelete(id)
-    .then((result) => {
+    .then(() => {
       res.status(204).json({
         status: 'success',
         message: 'successfully deleted!',
       })
     })
-    .catch((err) => {
+    .catch(() => {
       res.status(500).json({
         status: 'failed',
         message: 'Failed in delete number',

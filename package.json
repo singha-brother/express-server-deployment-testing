@@ -4,7 +4,9 @@
   "description": "full stack open course part 3, deploy express server",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint ."
   },
   "author": "thiha naung",
   "license": "ISC",
@@ -14,5 +16,8 @@
     "express": "^4.18.2",
     "mongoose": "^7.5.1",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.49.0"
   }
 }

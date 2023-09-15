@@ -6,7 +6,7 @@ console.log('Connecting to ', url)
 
 mongoose
   .connect(url)
-  .then((result) => {
+  .then(() => {
     console.log('Successfully connected to Database')
   })
   .catch((err) => {
@@ -35,7 +35,8 @@ const phonebookSchema = new mongoose.Schema({
 
 phonebookSchema.set('toJSON', {
   transform: (doc, returnedObj) => {
-    ;(returnedObj.id = returnedObj._id.toString()), delete returnedObj._id
+    returnedObj.id = returnedObj._id.toString()
+    delete returnedObj._id
     delete returnedObj.__v
   },
 })

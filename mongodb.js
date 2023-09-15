@@ -14,7 +14,7 @@ const DB_URL = process.env.REMOTE_DB_URL
 mongoose.set('strictQuery', false)
 mongoose
   .connect(DB_URL)
-  .then((_) => {
+  .then(() => {
     console.log('Database Connected Successfully!')
   })
   .catch((err) => {
@@ -55,7 +55,7 @@ if (process.argv.length === 5) {
     number,
   })
 
-  newNumber.save().then((result) => {
+  newNumber.save().then(() => {
     console.log(`saved ${name} number ${number} to phonebook`)
     mongoose.connection.close()
   })
